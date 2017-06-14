@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/dolist.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/dolist.js"></script>
+</head>
+<body>
+    <div class="container-fluid" ng-app="myapp" ng-controller="dolist">
+        <div class="row">
+            <div class="left col-xs-5 col-sm-4 col-md-3">
+                <!--搜索-->
+                <div class="form-group search" >
+                    <div class="input-group">
+                        <div class="input-group-addon searchicon">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search · For" ng-model="search">
+                    </div>
+                </div>
+                <div class="done" ng-click="showdone()">
+                    <span class="glyphicon glyphicon-thumbs-up text-success"></span>
+                    <span class="text-success">已完成</span>
+                    <span class="text-success nums">{{done.length}}</span>
+                </div>
+                <div class="listBox" ng-click="showlist()">
+                    <div class="title">
+                        <span class="glyphicon glyphicon-hand-right text-info"></span>
+                        <span class="text-info">待办事项</span>
+                    </div>
+                    <div class="list" ng-repeat="item in data | filter:{title:search} track by item.id ">
+                        <span class="glyphicon glyphicon-list-alt"></span>
+                        <input type="text" class="text-muted form-control" value="新建事项" ng-model="item.title" ng-focus="focus(item.id)" ng-blur="blur(item.id)">
+                        <span class="glyphicon glyphicon-trash text-danger trash" ng-click="removeList(item.id)"></span>
+                    </div>
+                    <div class="add" ng-click="add()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <span>添加事项</span>
+                    </div>
+                </div>
+            </div>
+            <!--项目列表-->
+            <div class="right col-xs-7 col-sm-8 col-md-9"ng-show="isshow==true" >
+                <div class="header">
+                    <div class="title">
+                        {{currentCon.title}}
+                    </div>
+                    <div class="addlist" ng-click="addOpt()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <span>添加条目</span>
+                    </div>
+                </div>
+                <div class="optBox">
+                    <div class="opt" ng-repeat="item in currentCon.son track by item.id">
+                        <span class="glyphicon glyphicon-heart-empty doneBtn" ng-click="doneFun(item.id)"></span>
+                        <input type="text" class="form-control" ng-model="item.title" ng-blur="blur()">
+                        <span class="glyphicon glyphicon-trash trash text-danger" ng-click="delOpt(item.id)"></span>
+                    </div>
+                </div>
+            </div>
+            <!--完成条目-->
+            <div class="right col-xs-7 col-sm-8 col-md-9" ng-show="isshow==false" >
+                <div class="header">
+                    <div class="title">完成列表</div>
+                </div>
+                <div class="optBox">
+                    <div class="opt" ng-repeat="item in done track by item.id">
+                        <span class="glyphicon glyphicon-heart-empty doneBtns"></span>
+                        <div class="form-control donetitle">{{item.title}}</div>
+                        <span class="glyphicon glyphicon-trash trash text-danger" ng-click="removeDone(item.id)"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
